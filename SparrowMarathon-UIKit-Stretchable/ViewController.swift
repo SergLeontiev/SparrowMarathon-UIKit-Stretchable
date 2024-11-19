@@ -12,8 +12,8 @@ class ViewController: UIViewController {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "shrek")
-        imageView.contentMode = .top
+        imageView.image = UIImage(named: "image1")
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()

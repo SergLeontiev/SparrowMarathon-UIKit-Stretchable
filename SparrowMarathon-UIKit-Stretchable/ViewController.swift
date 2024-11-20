@@ -8,6 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
+    private let imageHeight: CGFloat = 270
     private var imageViewHeightConstraint: NSLayoutConstraint?
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -19,7 +20,7 @@ class ViewController: UIViewController {
     }()
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height + 300)
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height + imageHeight)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
         scrollView.backgroundColor = .white
@@ -32,14 +33,14 @@ class ViewController: UIViewController {
         view.addSubview(scrollView)
         view.addSubview(imageView)
        
-        imageViewHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 270)
+        imageViewHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: imageHeight)
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             imageViewHeightConstraint!,
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 270),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: imageHeight - 20),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -49,6 +50,10 @@ class ViewController: UIViewController {
 
 extension ViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        imageViewHeightConstraint?.constant = max(270 - scrollView.contentOffset.y, 0)
+        let offset = scrollView.contentOffset.y
+        imageViewHeightConstraint?.constant = max(imageHeight - offset, 0)
+        if offset <= 0 {
+            scrollView.verticalScrollIndicatorInsets.top = -scrollView.contentOffset.y + 25
+        }
     }
 }
